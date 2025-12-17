@@ -210,13 +210,14 @@ export default function Home() {
   return (
     <Suspense
       fallback={
-        <div className="h-screen w-screen bg-background flex flex-col items-center justify-center gap-4">
+        <div className="h-screen w-screen bg-background flex flex-col items-center justify-center gap-6">
           <h1 className="text-4xl font-bold tracking-tight flex items-center gap-2 text-foreground">
             ANSI
             <span className="text-primary bg-primary/10 px-2 rounded-md border border-primary/20">
               101
             </span>
           </h1>
+          <div className="w-48 h-1 bg-secondary rounded-full overflow-hidden" />
         </div>
       }
     >
