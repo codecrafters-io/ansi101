@@ -244,7 +244,7 @@ function analyzeSequence(
       descriptions.push(`Background Bright ${BASIC_COLORS[code - 100]}`);
       category = "color";
     } else {
-      descriptions.push(`Unknown Code (${code})`);
+      descriptions.push(`Unknown Code (${code}) - Ignored by the terminal`);
     }
   }
 
