@@ -218,6 +218,9 @@ export default function Home() {
             </span>
           </h1>
           <div className="w-48 h-1 bg-secondary rounded-full overflow-hidden" />
+          <p className="text-xs text-muted-foreground font-mono uppercase tracking-widest animate-pulse">
+            Initializing Parser...
+          </p>
         </div>
       }
     >
