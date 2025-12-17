@@ -10,7 +10,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
 
 const DEFAULT_INPUT =
-  "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m\nCursor: \\x1b[5A (Move Up 5)";
+  "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m\nCursor: \\x1b[5A (Move Up 5)\n\\033[31mR\\033[33mA\\033[32mI\\033[34mN\\033[35mB\\033[36mO\\033[31mW\\033[0m";
 
 const MIN_SIDEBAR_WIDTH = 250;
 const MAX_SIDEBAR_WIDTH = 800;
@@ -153,18 +153,23 @@ export default function Home() {
             } as React.CSSProperties
           }
           className={`
-            w-full lg:w-[var(--sidebar-width)] 
+            /* BASE WIDTH */
+            w-full
+            
+            /* DESKTOP WIDTH */
+            lg:w-[var(--sidebar-width)]
+            
             bg-card border-l border-border 
             flex flex-col
             transition-transform duration-300 ease-in-out
             shrink-0
-            relative
+            
+            /* MOBILE DRAWER BEHAVIOR */
             ${
               isSidebarOpen
-                ? "fixed inset-0 z-50 top-14 translate-x-0"
-                : "fixed inset-0 z-50 top-14 translate-x-full lg:translate-x-0 lg:static"
+                ? "fixed inset-0 z-50 top-14 translate-x-0" // Open: Cover screen
+                : "fixed inset-0 z-50 top-14 translate-x-full lg:translate-x-0 lg:static" // Closed: Off-screen OR Desktop Static
             }
-            lg:block 
         `}
         >
           {/* DRAG HANDLE (Desktop Only) */}
