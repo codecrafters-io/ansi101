@@ -86,7 +86,7 @@ function TokenCard({
       }`}
     >
       {/* Header / Summary */}
-      <details className="group open:bg-muted/30">
+      <details open className="group open:bg-muted/30">
         <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer list-none select-none group-[:not([open])]:hover:bg-muted/30 transition-colors">
           {/* Arrow */}
           <div className="text-foreground transition-transform group-open:rotate-90">

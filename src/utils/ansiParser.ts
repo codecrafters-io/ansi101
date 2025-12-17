@@ -39,7 +39,12 @@ export function parseAnsi(input: string): AnsiToken[] {
 
     const { category, description } = analyzeSequence(command, params);
 
-    const parts = generateAnsiBreakdown(fullMatch, command, params);
+    const parts = generateAnsiBreakdown(
+      fullMatch,
+      command,
+      params,
+      privateMode
+    );
 
     tokens.push({
       id: generateId(),

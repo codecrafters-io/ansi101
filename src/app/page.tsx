@@ -8,6 +8,7 @@ import TerminalOutput from "@/components/TerminalOutput";
 import InputEditor from "@/components/InputEditor";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Menu, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 const DEFAULT_INPUT =
   "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m\nCursor: \\x1b[5A (Move Up 5)\n\\033[31mR\\033[33mA\\033[32mI\\033[34mN\\033[35mB\\033[36mO\\033[31mW\\033[0m";
@@ -19,6 +20,7 @@ export default function Home() {
   const [input, setInput] = useState(DEFAULT_INPUT);
   const [tokens, setTokens] = useState<AnsiToken[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -47,6 +49,14 @@ export default function Home() {
     },
     [isResizing]
   );
+
+  useEffect(() => {
+    const queryParam = searchParams.get("q") || searchParams.get("input");
+
+    if (queryParam) {
+      setInput(queryParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (isResizing) {

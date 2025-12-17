@@ -8,16 +8,20 @@ const PARAM_DESCRIPTIONS: Record<number, string> = {
 };
 
 export function generateAnsiBreakdown(
-  raw: string,
+  fullMatch: string,
   command: string,
-  params: number[]
+  params: number[],
+  privateMode?: string
 ): AnsiTokenPart[] {
   const parts: AnsiTokenPart[] = [];
+
+  const csiIndex = fullMatch.indexOf("[");
+  const prefix = fullMatch.substring(0, csiIndex);
 
   // 1. The Escape Sequence Header (e.g \x1b[)
   parts.push({
     label: "ESC",
-    value: raw.slice(0, raw.indexOf("[")),
+    value: prefix,
     type: "marker",
     description:
       "Escape Character (ASCII 27 / Hex 1B). Signals the start of a sequence.",
@@ -30,6 +34,15 @@ export function generateAnsiBreakdown(
     description:
       "Control Sequence Introducer (CSI). Starts the command arguments.",
   });
+
+  if (privateMode) {
+    parts.push({
+      type: "marker", // It's a marker, similar to [
+      value: privateMode,
+      label: "DEC",
+      description: "DEC Private Mode Indicator.",
+    });
+  }
 
   // 2. The Parameters
   params.forEach((param, index) => {

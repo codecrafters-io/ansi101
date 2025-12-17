@@ -15,6 +15,11 @@ export interface AnsiTokenPart {
   type: "marker" | "param" | "cmd" | "separator";
 }
 
+export interface SequenceDescription {
+  category: AnsiCategory;
+  description: string;
+}
+
 export interface AnsiToken {
   id: string;
   type: TokenType;
