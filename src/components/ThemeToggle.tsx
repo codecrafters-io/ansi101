@@ -1,24 +1,30 @@
 "use client";
+
 import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {
-  const [darkMode, setDarkMode] = useState(true);
+  const [darkMode, setDarkMode] = useState(false);
 
+  // Sync state with the DOM on mount (to show correct icon)
   useEffect(() => {
-    const isDark =
-      localStorage.getItem("theme") === "dark" ||
-      (!("theme" in localStorage) &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-
+    // Just check if the class is already there!
+    const isDark = document.documentElement.classList.contains("dark");
     setDarkMode(isDark);
-    document.documentElement.classList.toggle("dark", isDark);
   }, []);
 
   const toggleTheme = () => {
-    const newMode = !darkMode;
+    const isDark = document.documentElement.classList.contains("dark");
+    const newMode = !isDark;
+
+    if (newMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+
     setDarkMode(newMode);
-    document.documentElement.classList.toggle("dark", newMode);
-    localStorage.setItem("theme", newMode ? "dark" : "light");
   };
 
   return (
@@ -29,7 +35,7 @@ export default function ThemeToggle() {
       title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
     >
       {darkMode ? (
-        // Sun Icon (for Dark Mode)
+        // Sun Icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"
@@ -45,7 +51,7 @@ export default function ThemeToggle() {
           <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
         </svg>
       ) : (
-        // Moon Icon (for Light Mode)
+        // Moon Icon
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="20"

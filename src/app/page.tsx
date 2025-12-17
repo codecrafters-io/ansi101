@@ -1,26 +1,27 @@
 "use client";
+import { useState, useEffect, useCallback, useRef, Suspense } from "react";
+import { Menu, X } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
-import { useState, useEffect, useCallback, useRef } from "react";
 import { parseAnsi } from "@/utils/ansiParser";
 import { AnsiToken } from "@/types/ansi";
 import ExplanationSidebar from "@/components/ExplanationSidebar";
 import TerminalOutput from "@/components/TerminalOutput";
 import InputEditor from "@/components/InputEditor";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Menu, X } from "lucide-react";
-// import { useSearchParams } from "next/navigation";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const DEFAULT_INPUT =
-  "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m\nCursor: \\x1b[5A (Move Up 5)\n\\033[31mR\\033[33mA\\033[32mI\\033[34mN\\033[35mB\\033[36mO\\033[31mW\\033[0m";
+  "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m";
 
 const MIN_SIDEBAR_WIDTH = 250;
 const MAX_SIDEBAR_WIDTH = 800;
 
-export default function Home() {
+function ANSIWorkspace() {
   const [input, setInput] = useState(DEFAULT_INPUT);
   const [tokens, setTokens] = useState<AnsiToken[]>([]);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-  // const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -50,13 +51,13 @@ export default function Home() {
     [isResizing]
   );
 
-  // useEffect(() => {
-  //   const queryParam = searchParams.get("q") || searchParams.get("input");
+  useEffect(() => {
+    const queryParam = searchParams.get("q") || searchParams.get("input");
 
-  //   if (queryParam) {
-  //     setInput(queryParam);
-  //   }
-  // }, [searchParams]);
+    if (queryParam) {
+      setInput(queryParam);
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     if (isResizing) {
@@ -79,6 +80,7 @@ export default function Home() {
         isResizing ? "cursor-col-resize select-none" : ""
       }`}
     >
+      <LoadingScreen />
       {/* HEADER */}
       <header className="h-14 shrink-0 border-b border-border flex items-center justify-between px-4 lg:px-6 bg-card/80 backdrop-blur-sm z-40 relative">
         <div className="flex items-center gap-3">
@@ -201,5 +203,24 @@ export default function Home() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen w-screen bg-background flex flex-col items-center justify-center gap-4">
+          <h1 className="text-4xl font-bold tracking-tight flex items-center gap-2 text-foreground">
+            ANSI
+            <span className="text-primary bg-primary/10 px-2 rounded-md border border-primary/20">
+              101
+            </span>
+          </h1>
+        </div>
+      }
+    >
+      <ANSIWorkspace />
+    </Suspense>
   );
 }
