@@ -1,4 +1,4 @@
-import { TerminalState } from "../types/ansi";
+import { TerminalState } from "@/types/ansi";
 
 export const INITIAL_STATE: TerminalState = {
   fgStyle: null,

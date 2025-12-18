@@ -1,10 +1,5 @@
-import { AnsiToken } from "@/types/ansi";
-import {
-  INITIAL_STATE,
-  updateState,
-  TerminalState,
-  getStyleObject,
-} from "@/utils/ansiToCss";
+import { AnsiToken, TerminalState } from "@/types/ansi";
+import { INITIAL_STATE, updateState, getStyleObject } from "@/utils/ansiToCss";
 
 interface TerminalOutputProps {
   tokens: AnsiToken[];
