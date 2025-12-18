@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
-/* Defining the Theme Variables
-   We use HSL values (without 'hsl()') so Tailwind can auto-handle opacity 
+/* 
+   Using HSL values (without 'hsl()') so Tailwind can auto-handle opacity 
    e.g. bg-primary/50 works automatically.
 */
 @layer base {
   :root {
-    /* LIGHT MODE (Paper & Ink) */
+    /* LIGHT MODE */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
 
@@ -32,17 +32,17 @@
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 5.9% 90%;
+    --terminal-border: 240 5.9% 40%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
 
     --radius: 0.5rem;
 
     --highlight: 45 93% 47%;
-    /* Yellow */
   }
 
   .dark {
-    /* DARK MODE (Zinc / Space) */
+    /* DARK MODE */
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
 
@@ -68,17 +68,14 @@
     --destructive-foreground: 0 0% 98%;
 
     --border: 240 3.7% 15.9%;
+    --terminal-border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
 
     --highlight: 48 96% 53%;
-    /* Bright Yellow */
   }
 }
 
-/* Wiring up variables to Tailwind Utilities 
-   bg-background will now use var(--background)
-*/
 @theme {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -105,6 +102,7 @@
   --color-destructive-foreground: hsl(var(--destructive-foreground));
 
   --color-border: hsl(var(--border));
+  --color-terminal-border: hsl(var(--terminal-border));
   --color-input: hsl(var(--input));
   --color-ring: hsl(var(--ring));
 
@@ -115,9 +113,6 @@
   --radius-sm: calc(var(--radius) - 4px);
 }
 
-/* Custom Scrollbar Utilities 
-   (Replaces the tailwind-scrollbar plugin with native CSS)
-*/
 @utility scrollbar-thin {
   scrollbar-width: thin;
 
@@ -140,6 +135,19 @@
   }
 }
 
+@utility scrollbar-thumb-terminal-border {
+  scrollbar-color: hsl(var(--terminal-border)) transparent;
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--terminal-border));
+    border-radius: 9999px;
+  }
+}
+
 /* Default Base Styles */
 @layer base {
   * {
@@ -149,10 +157,4 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

@@ -148,7 +148,7 @@ function ANSIWorkspace() {
               </span>
             </div>
 
-            <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-zinc-800 bg-black">
+            <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-terminal-border bg-black">
               <TerminalOutput tokens={tokens} hoveredId={hoveredId} />
             </div>
           </div>
