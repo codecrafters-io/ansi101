@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { AnsiToken } from "@/types/ansi";
 
-interface Props {
+interface InputEditorProps {
   input: string;
   setInput: (val: string) => void;
   tokens: AnsiToken[];
@@ -13,7 +13,7 @@ export default function InputEditor({
   setInput,
   tokens,
   hoveredId,
-}: Props) {
+}: InputEditorProps) {
   const backdropRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {

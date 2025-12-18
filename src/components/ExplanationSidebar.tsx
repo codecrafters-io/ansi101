@@ -1,6 +1,6 @@
 import { AnsiToken } from "@/types/ansi";
 
-interface Props {
+interface ExplanationSidebarProps {
   tokens: AnsiToken[];
   onHoverChange: (id: string | null) => void;
   hoveredId: string | null;
@@ -10,7 +10,7 @@ export default function ExplanationSidebar({
   tokens,
   onHoverChange,
   hoveredId,
-}: Props) {
+}: ExplanationSidebarProps) {
   return (
     <div className="h-full flex flex-col bg-card border-l border-border text-card-foreground font-sans text-sm">
       {/* Header */}
@@ -51,30 +51,12 @@ function TokenCard({
   isHovered: boolean;
   onHoverChange: (id: string | null) => void;
 }) {
+  // Ignore Text Tokens
   if (token.type === "text") {
     return null;
-    // <div
-    //   onMouseEnter={() => onHoverChange(token.id)}
-    //   onMouseLeave={() => onHoverChange(null)}
-    //   className={`group px-4 py-3 border-b border-slate-800 hover:bg-slate-800/50 transition-colors ${
-    //     isHovered ? "bg-slate-800" : ""
-    //   }`}
-    // >
-    //   <div className="flex items-baseline justify-between mb-1">
-    //     <span className="font-bold text-slate-400 text-xs uppercase tracking-wide">
-    //       Literal Text
-    //     </span>
-    //   </div>
-    //   <code className="text-white bg-slate-950 px-1.5 py-0.5 rounded text-sm break-all">
-    //     {token.raw.replace(/\n/g, "↵")}
-    //   </code>
-    //   <p className="text-slate-500 text-xs mt-1">
-    //     Matches the characters literally.
-    //   </p>
-    // </div>
   }
 
-  // ANSI Tokens (The detailed ones)
+  // ANSI Tokens
   return (
     <div
       onMouseEnter={() => onHoverChange(token.id)}
@@ -117,7 +99,7 @@ function TokenCard({
               className="relative flex gap-3 text-xs leading-relaxed group/part"
             >
               {/* Visual Line Connecting Parts */}
-              <div className="absolute left-[3px] top-3 bottom-[-12px] w-px bg-border last:hidden"></div>
+              <div className="absolute left-0.75 top-3 bottom-3 w-px bg-border last:hidden"></div>
 
               {/* Value Dots */}
               <div className="shrink-0 flex flex-col items-center z-10">

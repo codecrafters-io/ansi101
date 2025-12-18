@@ -6,12 +6,15 @@ import {
   getStyleObject,
 } from "@/utils/ansiToCss";
 
-interface Props {
+interface TerminalOutputProps {
   tokens: AnsiToken[];
   hoveredId: string | null;
 }
 
-export default function TerminalOutput({ tokens, hoveredId }: Props) {
+export default function TerminalOutput({
+  tokens,
+  hoveredId,
+}: TerminalOutputProps) {
   const renderableParts: {
     id: string;
     text: string;

@@ -66,7 +66,7 @@ export function generateAnsiBreakdown(
 ): AnsiTokenPart[] {
   const parts: AnsiTokenPart[] = [];
 
-  // 1. Prefix / ESC
+  // Prefix / ESC
   const csiIndex = fullMatch.indexOf("[");
   const prefix = fullMatch.substring(0, csiIndex);
 
@@ -95,7 +95,7 @@ export function generateAnsiBreakdown(
     });
   }
 
-  // 2. Complex Parameter Parsing
+  // Parameter Parsing
   let i = 0;
   while (i < params.length) {
     const code = params[i];
@@ -212,7 +212,7 @@ export function generateAnsiBreakdown(
     i++; // Increment loop
   }
 
-  // 3. Command Suffix
+  // Command Suffix
   parts.push({
     type: "cmd",
     value: command,
@@ -250,7 +250,7 @@ function getCommandDescription(cmd: string, privateMode?: string): string {
   return "Command Letter";
 }
 
-// Simplified Standard Description (Does not handle multi-part codes anymore)
+// Simplified Standard Description
 function getStandardParamDescription(
   cmd: string,
   param: number,

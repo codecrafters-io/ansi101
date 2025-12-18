@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 export default function LoadingScreen() {
@@ -7,6 +6,7 @@ export default function LoadingScreen() {
   const [shouldRender, setShouldRender] = useState(true);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     const timer = setTimeout(() => {
       setShouldRender(false);
@@ -19,7 +19,7 @@ export default function LoadingScreen() {
   return (
     <div
       className={`
-        fixed inset-0 z-[100] flex flex-col items-center justify-center 
+        fixed inset-0 z-100 flex flex-col items-center justify-center 
         bg-background transition-opacity duration-700 ease-out
         ${mounted ? "opacity-0 pointer-events-none" : "opacity-100"}
       `}

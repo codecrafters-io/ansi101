@@ -81,7 +81,7 @@ function analyzeSequence(
   command: string,
   params: number[]
 ): { category: AnsiCategory; description: string } {
-  // 1. Handle Special Keys (ends in ~)
+  // Handle Special Keys (ends in ~)
   if (command === "~") {
     const code = params[0];
     if (code === 1) return { category: "unknown", description: "Home Key" };
@@ -93,8 +93,7 @@ function analyzeSequence(
     return { category: "unknown", description: `Special Key Code (~${code})` };
   }
 
-  // 2. Handle Private Modes (h = Set Mode, l = Reset Mode)
-  // Common for hiding/showing cursor
+  // Handle Private Modes (h = Set Mode, l = Reset Mode)
   if (command === "h" || command === "l") {
     const mode = params[0];
     const action = command === "h" ? "Set" : "Reset";
@@ -121,7 +120,7 @@ function analyzeSequence(
     };
   }
 
-  // 1. Cursor / Erase Commands (Non-SGR)
+  // Cursor / Erase Commands (Non-SGR)
   if (command !== "m") {
     switch (command) {
       case "A":
@@ -185,7 +184,7 @@ function analyzeSequence(
     }
   }
 
-  // 2. SGR (Select Graphic Rendition) - The 'm' command
+  // SGR (Select Graphic Rendition) - The 'm' command
   const descriptions: string[] = [];
   let category: AnsiCategory = "style";
 

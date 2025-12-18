@@ -27,7 +27,7 @@ const PALETTE_ANSI = [
   "#2472c8",
   "#bc3fbc",
   "#11a8cd",
-  "#e5e5e5", // 0-7
+  "#e5e5e5",
   "#666666",
   "#f14c4c",
   "#23d18b",
@@ -35,7 +35,7 @@ const PALETTE_ANSI = [
   "#3b8eea",
   "#d670d6",
   "#29b8db",
-  "#ffffff", // 8-15 (Bright)
+  "#ffffff",
 ];
 
 // Helper to get color from 256-color mode
