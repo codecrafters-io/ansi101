@@ -50,12 +50,17 @@ export default function InputEditor({
       </div>
 
       <textarea
+        id="ansi-editor"
+        name="ansi-input"
+        aria-label="Raw ANSI Input String"
         value={input}
         onChange={(e) => setInput(e.target.value)}
         onScroll={handleScroll}
         className={`${sharedClasses} bg-transparent focus:outline-none resize-none text-foreground z-10 block w-full h-full overflow-auto scrollbar-thin scrollbar-thumb-border`}
         spellCheck={false}
         placeholder="Paste your ANSI string here..."
+        autoComplete="off"
+        autoCapitalize="off"
       />
     </div>
   );
