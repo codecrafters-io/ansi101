@@ -99,7 +99,7 @@ function TokenCard({
               className="relative flex gap-3 text-xs leading-relaxed group/part"
             >
               {/* Visual Line Connecting Parts */}
-              <div className="absolute left-0.75 top-3 bottom-3 w-px bg-border last:hidden"></div>
+              <div className="absolute left-0.75 top-3 -bottom-3 w-px bg-border last:hidden"></div>
 
               {/* Value Dots */}
               <div className="shrink-0 flex flex-col items-center z-10">
