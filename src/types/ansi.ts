@@ -32,3 +32,15 @@ export interface AnsiToken {
   summary: string;
   parts?: AnsiTokenPart[];
 }
+
+export interface TerminalState {
+  fgStyle: string | null;
+  bgStyle: string | null;
+  bold: boolean;
+  italic: boolean;
+  underline: boolean;
+  dim: boolean;
+  strikethrough: boolean;
+  hidden: boolean;
+  inverse: boolean;
+}
