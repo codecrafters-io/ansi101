@@ -1,14 +1,13 @@
 "use client";
-
 import { useState, useEffect } from "react";
 
 export default function ThemeToggle() {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Sync state with the DOM on mount (to show correct icon)
+  // Sync state with the DOM on mount
   useEffect(() => {
-    // Just check if the class is already there!
     const isDark = document.documentElement.classList.contains("dark");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDarkMode(isDark);
   }, []);
 
@@ -31,12 +30,13 @@ export default function ThemeToggle() {
     <button
       onClick={toggleTheme}
       className="p-2 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground border border-transparent hover:border-border"
-      aria-label="Toggle Theme"
+      aria-label={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
       title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
     >
       {darkMode ? (
         // Sun Icon
         <svg
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"
@@ -53,6 +53,7 @@ export default function ThemeToggle() {
       ) : (
         // Moon Icon
         <svg
+          aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           width="20"
           height="20"

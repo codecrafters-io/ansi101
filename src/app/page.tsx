@@ -76,7 +76,7 @@ function ANSIWorkspace() {
 
   return (
     <main
-      className={`h-[100dvh] w-screen bg-background flex flex-col overflow-hidden text-foreground font-sans transition-colors duration-300 relative ${
+      className={`h-dvh w-screen bg-background flex flex-col overflow-hidden text-foreground font-sans transition-colors duration-300 relative ${
         isResizing ? "cursor-col-resize select-none" : ""
       }`}
     >
@@ -103,11 +103,14 @@ function ANSIWorkspace() {
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             className="lg:hidden p-2 -mr-2 text-muted-foreground hover:bg-muted rounded-md active:scale-95 transition-all"
+            aria-label={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
+            aria-expanded={isSidebarOpen}
+            aria-controls="mobile-sidebar"
           >
             {isSidebarOpen ? (
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5" aria-hidden="true" />
             ) : (
-              <Menu className="w-5 h-5" />
+              <Menu className="w-5 h-5" aria-hidden="true" />
             )}
           </button>
         </div>
@@ -118,7 +121,7 @@ function ANSIWorkspace() {
         {/* LEFT COLUMN: Input & Preview */}
         <div className="flex-1 flex flex-col min-w-0 bg-secondary/5">
           {/* Top: Input Area */}
-          <div className="flex-1 flex flex-col border-b border-border relative min-h-[50%] lg:min-h-[300px]">
+          <div className="flex-1 flex flex-col border-b border-border relative min-h-[50%] lg:min-h-75">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between">
               <span>Input String</span>
               <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
@@ -158,6 +161,7 @@ function ANSIWorkspace() {
 
         {/* RIGHT COLUMN: Sidebar */}
         <div
+          id="mobile-sidebar"
           ref={sidebarRef}
           style={
             {
@@ -169,7 +173,7 @@ function ANSIWorkspace() {
             w-full
             
             /* DESKTOP WIDTH */
-            lg:w-[var(--sidebar-width)]
+            lg:w-(--sidebar-width)
             
             bg-card border-l border-border 
             flex flex-col
@@ -186,12 +190,12 @@ function ANSIWorkspace() {
         >
           {/* DRAG HANDLE (Desktop Only) */}
           <div
-            className={`hidden lg:block absolute left-0 top-0 bottom-0 w-1 -ml-[3px] cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-50 ${
+            className={`hidden lg:block absolute left-0 top-0 bottom-0 w-1 -ml-0.75 cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-50 ${
               isResizing ? "bg-primary" : "bg-transparent"
             }`}
             onMouseDown={startResizing}
           />
-          {/* Cover UI When Resizing */}
+          {/* Cover Sidebar When Resizing */}
           {isResizing && (
             <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-full h-full z-40" />
           )}
