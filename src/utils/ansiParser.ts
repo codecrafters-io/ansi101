@@ -17,6 +17,7 @@ export function parseAnsi(input: string): AnsiToken[] {
   const generateId = () => Math.random().toString(36).substr(2, 9);
 
   while ((match = ANSI_REGEX.exec(input)) !== null) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [fullMatch, _prefix, privateMode, paramsRaw, command] = match;
     const index = match.index;
 
