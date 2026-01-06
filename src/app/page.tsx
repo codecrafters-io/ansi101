@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, HelpCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 
 import { parseAnsi } from "@/utils/ansiParser";
@@ -10,6 +10,7 @@ import TerminalOutput from "@/components/TerminalOutput";
 import InputEditor from "@/components/InputEditor";
 import ThemeToggle from "@/components/ThemeToggle";
 import LoadingScreen from "@/components/LoadingScreen";
+import InfoModal from "@/components/InfoModal";
 
 const DEFAULT_INPUT =
   "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m";
@@ -24,6 +25,7 @@ function ANSIWorkspace() {
   const searchParams = useSearchParams();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const [sidebarWidth, setSidebarWidth] = useState(384);
   const [isResizing, setIsResizing] = useState(false);
@@ -40,7 +42,6 @@ function ANSIWorkspace() {
   const resize = useCallback(
     (mouseMoveEvent: MouseEvent) => {
       if (isResizing) {
-        // Calculate new width: Total Window Width - Mouse X Position
         const newWidth = document.body.clientWidth - mouseMoveEvent.clientX;
 
         if (newWidth >= MIN_SIDEBAR_WIDTH && newWidth <= MAX_SIDEBAR_WIDTH) {
@@ -81,15 +82,24 @@ function ANSIWorkspace() {
       }`}
     >
       <LoadingScreen />
+      <InfoModal isOpen={isInfoOpen} onClose={() => setIsInfoOpen(false)} />
       {/* HEADER */}
       <header className="h-14 shrink-0 border-b border-border flex items-center justify-between px-4 lg:px-6 bg-card/80 backdrop-blur-sm z-40 relative">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           <h1 className="font-bold text-xl tracking-tight flex items-center gap-1">
             ANSI
             <span className="text-primary bg-primary/10 px-1 rounded border border-primary/20">
               101
             </span>
           </h1>
+
+          <button
+            onClick={() => setIsInfoOpen(true)}
+            className="cursor-pointer ml-1 text-muted-foreground hover:text-primary transition-colors"
+            aria-label="About ANSI101"
+          >
+            <HelpCircle className="w-4 h-4" />
+          </button>
         </div>
 
         <div className="flex items-center gap-4">

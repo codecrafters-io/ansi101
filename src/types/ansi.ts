@@ -13,6 +13,7 @@ export interface AnsiTokenPart {
   value: string;
   description: string;
   type: "marker" | "param" | "cmd" | "separator";
+  status?: "valid" | "error";
 }
 
 export interface SequenceDescription {

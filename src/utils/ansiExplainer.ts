@@ -110,7 +110,7 @@ export function generateAnsiBreakdown(
       });
     }
 
-    // --- LOGIC: EXTENDED COLORS (38 or 48) ---
+    // --- EXTENDED COLORS (38 or 48) ---
     if (command === "m" && (code === 38 || code === 48)) {
       const isBg = code === 48;
       const type = params[i + 1]; // Look ahead to the type (5 or 2)
@@ -199,13 +199,17 @@ export function generateAnsiBreakdown(
         // Unknown extended type, treat as standard
       }
     }
-    // --- LOGIC: STANDARD CODES ---
+    // STANDARD CODES
     else {
+      const desc = getStandardParamDescription(command, code, i, privateMode);
+      const isError = desc.startsWith("Unknown");
+
       parts.push({
         type: "param",
         value: code.toString(),
         label: "Param",
-        description: getStandardParamDescription(command, code, i, privateMode),
+        description: desc,
+        status: isError ? "error" : "valid",
       });
     }
 

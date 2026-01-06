@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 /* 
    Using HSL values (without 'hsl()') so Tailwind can auto-handle opacity 

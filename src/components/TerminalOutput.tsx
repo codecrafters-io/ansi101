@@ -30,7 +30,7 @@ export default function TerminalOutput({
         if (token.params) {
           currentState = updateState(currentState, token.params);
 
-          if (token.id === hoveredId) {
+          if (token.id === hoveredId && token.category !== "reset") {
             activeAnsiHighlighterId = token.id;
           } else if (activeAnsiHighlighterId) {
             const isVisualChange =
@@ -45,7 +45,8 @@ export default function TerminalOutput({
         text: token.raw,
         style: getStyleObject(currentState),
         isHighlighted:
-          token.id === hoveredId || activeAnsiHighlighterId !== null,
+          token.category !== "reset" &&
+          (token.id === hoveredId || activeAnsiHighlighterId !== null),
       });
     }
   });

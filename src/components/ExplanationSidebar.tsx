@@ -1,4 +1,5 @@
 import { AnsiToken } from "@/types/ansi";
+import clsx from "clsx";
 
 interface ExplanationSidebarProps {
   tokens: AnsiToken[];
@@ -51,12 +52,6 @@ function TokenCard({
   isHovered: boolean;
   onHoverChange: (id: string | null) => void;
 }) {
-  // Ignore Text Tokens
-  if (token.type === "text") {
-    return null;
-  }
-
-  // ANSI Tokens
   return (
     <div
       onMouseEnter={() => onHoverChange(token.id)}
@@ -92,7 +87,12 @@ function TokenCard({
         </summary>
 
         {/* Breakdown Table */}
-        <div className="px-4 pb-4 pl-8 space-y-3 mt-1">
+        <div
+          className={clsx(
+            "px-4 pl-8 space-y-3",
+            Number(token.parts?.length) > 0 && "pb-4 mt-1"
+          )}
+        >
           {token.parts?.map((part, idx) => (
             <div
               key={idx}
@@ -104,31 +104,52 @@ function TokenCard({
               {/* Value Dots */}
               <div className="shrink-0 flex flex-col items-center z-10">
                 <span
-                  className={`
-                        h-2 w-2 rounded-full mt-1.5
-                        ${
-                          part.type === "marker" ? "bg-muted-foreground/50" : ""
-                        }
-                        ${part.type === "param" ? "bg-blue-500" : ""}
-                        ${part.type === "cmd" ? "bg-pink-500" : ""}
-                        ${part.type === "separator" ? "bg-border" : ""}
-                    `}
+                  className={clsx(
+                    "h-2 w-2 rounded-full mt-1.5",
+                    part.type === "marker" && "bg-muted-foreground/50",
+                    part.type === "param" && part.status === "error"
+                      ? "bg-red-500"
+                      : "bg-blue-500",
+                    part.type === "cmd" && "bg-pink-500",
+                    part.type === "separator" && "bg-border"
+                  )}
                 ></span>
               </div>
 
               <div className="flex-1">
                 <div className="flex items-baseline gap-2">
                   {/* Code Badge */}
-                  <code className="font-mono font-bold text-foreground bg-muted px-1 rounded border border-border">
+                  <code
+                    className={clsx(
+                      "font-mono font-bold px-1 rounded border",
+                      part.status === "error"
+                        ? "text-red-600 border-red-200 bg-transparent dark:bg-red-900/30 dark:text-red-400 dark:border-red-900"
+                        : "bg-muted text-foreground border-border"
+                    )}
+                  >
                     {part.value}
                   </code>
                   {/* Type Label */}
-                  <span className="text-foreground uppercase text-[10px] font-bold tracking-wider">
+                  <span
+                    className={clsx(
+                      "uppercase text-[10px] font-bold tracking-wider",
+                      part.status === "error"
+                        ? "text-red-500"
+                        : "text-foreground"
+                    )}
+                  >
                     {part.label === part.value ? part.type : part.label}
                   </span>
                 </div>
                 {/* Description Text */}
-                <div className="text-foreground mt-0.5 opacity-80">
+                <div
+                  className={clsx(
+                    "mt-0.5",
+                    part.status === "error"
+                      ? "text-red-500/80"
+                      : "text-foreground opacity-80"
+                  )}
+                >
                   {part.description}
                 </div>
               </div>
