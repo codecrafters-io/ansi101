@@ -75,18 +75,9 @@ export default function InfoModal({ isOpen, onClose }: Props) {
               What is this?
             </h3>
             <p>
-              ANSI101 is a visual debugger for ANSI escape sequences. Just like{" "}
-              <a
-                href="https://regex101.com"
-                className="hover:underline font-semibold"
-                target="_blank"
-                rel="noreferrer"
-              >
-                regex101
-              </a>{" "}
-              helps you debug regular expressions, this tool helps developers
-              parse, understand, and troubleshoot the ANSI codes that power
-              terminal colors, cursor movements, and rich text interfaces.
+              ANSI101 is a visual debugger for ANSI escape sequences. It helps
+              developers parse, understand, and troubleshoot the ANSI codes that
+              power terminal colors, cursor movements, and rich text interfaces.
             </p>
           </div>
 
