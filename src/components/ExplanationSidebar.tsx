@@ -67,9 +67,26 @@ function TokenCard({
         <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer list-none select-none group-[:not([open])]:hover:bg-muted/30 transition-colors">
           {/* Arrow */}
           <div className="text-foreground transition-transform group-open:rotate-90">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M8 5v14l11-7z" />
-            </svg>
+            {token.type === "ansi" && (
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            )}
+            {token.type === "text" && (
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+              >
+                <circle cx="12" cy="12" r="6" />
+              </svg>
+            )}
           </div>
 
           <div className="flex-1 min-w-0">
