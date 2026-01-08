@@ -102,7 +102,7 @@ export default function InfoModal({ isOpen, onClose }: Props) {
 
             <div className="flex gap-3">
               <a
-                href="https://github.com/codecrafters-io"
+                href="https://github.com/codecrafters-io/ansi101"
                 target="_blank"
                 rel="noreferrer"
                 className="hover:text-primary transition-colors"
