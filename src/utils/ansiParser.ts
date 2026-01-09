@@ -14,8 +14,6 @@ export function parseAnsi(input: string): AnsiToken[] {
   let lastIndex = 0;
   let match;
 
-  const generateId = () => Math.random().toString(36).substr(2, 9);
-
   while ((match = ANSI_REGEX.exec(input)) !== null) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [fullMatch, _prefix, privateMode, paramsRaw, command] = match;
@@ -23,7 +21,7 @@ export function parseAnsi(input: string): AnsiToken[] {
 
     if (index > lastIndex) {
       tokens.push({
-        id: generateId(),
+        id: `text-${lastIndex}`,
         type: "text",
         raw: input.slice(lastIndex, index),
         start: lastIndex,
@@ -48,7 +46,7 @@ export function parseAnsi(input: string): AnsiToken[] {
     );
 
     tokens.push({
-      id: generateId(),
+      id: `ansi-${index}`,
       type: "ansi",
       raw: fullMatch,
       start: index,
@@ -66,7 +64,7 @@ export function parseAnsi(input: string): AnsiToken[] {
   // Text After
   if (lastIndex < input.length) {
     tokens.push({
-      id: generateId(),
+      id: `text-${lastIndex}`,
       type: "text",
       raw: input.slice(lastIndex),
       start: lastIndex,

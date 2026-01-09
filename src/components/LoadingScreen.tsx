@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 export default function LoadingScreen() {
   const [mounted, setMounted] = useState(false);
@@ -18,11 +19,10 @@ export default function LoadingScreen() {
 
   return (
     <div
-      className={`
-        fixed inset-0 z-100 flex flex-col items-center justify-center 
-        bg-background transition-opacity duration-700 ease-out
-        ${mounted ? "opacity-0 pointer-events-none" : "opacity-100"}
-      `}
+      className={clsx(
+        "fixed inset-0 z-100 flex flex-col items-center justify-center bg-background transition-opacity duration-700 ease-out",
+        mounted ? "opacity-0 pointer-events-none" : "opacity-100"
+      )}
     >
       <div className="flex flex-col items-center gap-6">
         {/* LOGO ANIMATION */}

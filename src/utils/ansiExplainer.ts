@@ -56,8 +56,6 @@ const getBackgroundBrightDescription = (code: number): string => {
   return `Set Background Color: ${BRIGHT_COLORS[code] || "Unknown"}`;
 };
 
-// --- Main Generator ---
-
 export function generateAnsiBreakdown(
   fullMatch: string,
   command: string,
@@ -110,12 +108,12 @@ export function generateAnsiBreakdown(
       });
     }
 
-    // --- EXTENDED COLORS (38 or 48) ---
+    // EXTENDED COLORS (38 or 48)
     if (command === "m" && (code === 38 || code === 48)) {
       const isBg = code === 48;
       const type = params[i + 1]; // Look ahead to the type (5 or 2)
 
-      // A. Push the Marker (38/48)
+      // Push the Marker (38/48)
       parts.push({
         type: "param",
         value: code.toString(),
@@ -125,9 +123,9 @@ export function generateAnsiBreakdown(
         } Color Marker`,
       });
 
-      // B. Check next param: Type
+      // Check next param: Type
       if (type === 5) {
-        // --- 256 COLOR MODE (format: 38;5;ID) ---
+        // 256 COLOR MODE (format: 38;5;ID)
         addSeparator(parts); // Separator between 38 and 5
         parts.push({
           type: "param",
@@ -150,7 +148,7 @@ export function generateAnsiBreakdown(
           i += 1; // Skip just '5' (Malformed)
         }
       } else if (type === 2) {
-        // --- RGB MODE (format: 38;2;R;G;B) ---
+        // RGB MODE (format: 38;2;R;G;B)
         addSeparator(parts); // Separator between 38 and 2
         parts.push({
           type: "param",
@@ -195,8 +193,6 @@ export function generateAnsiBreakdown(
         } else {
           i += 1; // Malformed RGB
         }
-      } else {
-        // Unknown extended type, treat as standard
       }
     }
     // STANDARD CODES
@@ -213,7 +209,7 @@ export function generateAnsiBreakdown(
       });
     }
 
-    i++; // Increment loop
+    i++;
   }
 
   // Command Suffix
@@ -227,7 +223,6 @@ export function generateAnsiBreakdown(
   return parts;
 }
 
-// Helper to prevent code duplication for separators
 function addSeparator(parts: AnsiTokenPart[]) {
   parts.push({
     type: "separator",

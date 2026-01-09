@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 export default function ThemeToggle() {
   const [darkMode, setDarkMode] = useState(false);
 
-  // Sync state with the DOM on mount
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
     // eslint-disable-next-line react-hooks/set-state-in-effect

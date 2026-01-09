@@ -23,7 +23,7 @@ const PALETTE_ANSI = [
   "#11a8cd", // Cyan
   "#e5e5e5", // White
 
-  // Bright (8-15) - Much more distinct now
+  // Bright (8-15)
   "#666666", // Bright Black (Gray)
   "#f14c4c", // Bright Red
   "#23d18b", // Bright Green
@@ -34,7 +34,6 @@ const PALETTE_ANSI = [
   "#ffffff", // Bright White
 ];
 
-// Helper to get color from 256-color mode
 function get256Color(index: number): string {
   // 0-15: Standard/Bright
   if (index < 16) return PALETTE_ANSI[index];
@@ -61,7 +60,6 @@ export function updateState(
 ): TerminalState {
   const newState = { ...currentState };
 
-  // Use a while loop to handle variable-length arguments (like 38;2;r;g;b)
   let i = 0;
   while (i < params.length) {
     const code = params[i];
@@ -72,10 +70,9 @@ export function updateState(
     else if (code === 2) newState.dim = true;
     else if (code === 3) newState.italic = true;
     else if (code === 4) newState.underline = true;
-    else if (code === 7) newState.inverse = true; // Added Inverse
-    else if (code === 8) newState.hidden = true; // Added Hidden
+    else if (code === 7) newState.inverse = true;
+    else if (code === 8) newState.hidden = true;
     else if (code === 9) newState.strikethrough = true;
-    // Reset Styles
     else if (code === 22) {
       newState.bold = false;
       newState.dim = false;
@@ -97,8 +94,8 @@ export function updateState(
     else if (code >= 100 && code <= 107)
       newState.bgStyle = PALETTE_ANSI[code - 100 + 8];
     // Reset Colors
-    else if (code === 39) newState.fgStyle = null; // Default FG
-    else if (code === 49) newState.bgStyle = null; // Default BG
+    else if (code === 39) newState.fgStyle = null;
+    else if (code === 49) newState.bgStyle = null;
     // Extended Colors (38/48)
     else if (code === 38 || code === 48) {
       const isBg = code === 48;
@@ -149,7 +146,6 @@ export function getStyleObject(state: TerminalState): React.CSSProperties {
 
   // Handle Inverse Video (Swap FG and BG)
   if (state.inverse) {
-    // If no color is set, assume default terminal colors (White on Black)
     const defaultFg = "#e5e5e5";
     const defaultBg = "transparent";
 

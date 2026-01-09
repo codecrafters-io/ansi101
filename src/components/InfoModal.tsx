@@ -1,8 +1,8 @@
 "use client";
 
-import clsx from "clsx";
 import { X, Github, Globe } from "lucide-react";
 import { useEffect, useState } from "react";
+import clsx from "clsx";
 
 interface Props {
   isOpen: boolean;

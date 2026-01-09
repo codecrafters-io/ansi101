@@ -2,6 +2,8 @@
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
 import { Menu, X, HelpCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import clsx from "clsx";
 
 import { parseAnsi } from "@/utils/ansiParser";
 import { AnsiToken } from "@/types/ansi";
@@ -19,10 +21,27 @@ const MIN_SIDEBAR_WIDTH = 250;
 const MAX_SIDEBAR_WIDTH = 800;
 
 function ANSIWorkspace() {
-  const [input, setInput] = useState(DEFAULT_INPUT);
-  const [tokens, setTokens] = useState<AnsiToken[]>([]);
-  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const searchParams = useSearchParams();
+
+  const getInitialData = () => {
+    const urlInput = searchParams.get("q") || searchParams.get("input");
+    const rawInput = urlInput || DEFAULT_INPUT;
+
+    const t = parseAnsi(rawInput);
+
+    const firstAnsi = t.find((x) => x.type === "ansi");
+    const s = firstAnsi ? firstAnsi.id : t[0]?.id || null;
+
+    return { input: rawInput, tokens: t, selectedId: s };
+  };
+
+  const [initialData] = useState(getInitialData());
+  const [input, setInput] = useState(initialData.input);
+  const [tokens, setTokens] = useState<AnsiToken[]>(initialData.tokens);
+  const [selectedId, setSelectedId] = useState<string | null>(
+    initialData.selectedId
+  );
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
@@ -53,11 +72,11 @@ function ANSIWorkspace() {
   );
 
   useEffect(() => {
-    const queryParam = searchParams.get("q") || searchParams.get("input");
-
-    if (queryParam) {
-      setInput(queryParam);
-    }
+    const data = getInitialData();
+    setInput(data.input);
+    setTokens(data.tokens);
+    setSelectedId(data.selectedId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
 
   useEffect(() => {
@@ -73,25 +92,32 @@ function ANSIWorkspace() {
 
   useEffect(() => {
     setTokens(parseAnsi(input));
+
+    if (!input) {
+      setSelectedId(null);
+    }
   }, [input]);
 
   return (
     <main
-      className={`h-dvh w-screen bg-background flex flex-col overflow-hidden text-foreground font-sans transition-colors duration-300 relative ${
-        isResizing ? "cursor-col-resize select-none" : ""
-      }`}
+      className={clsx(
+        "h-dvh w-screen bg-background flex flex-col overflow-hidden text-foreground font-sans transition-colors duration-300 relative",
+        isResizing && "cursor-col-resize select-none"
+      )}
     >
       <LoadingScreen />
       <InfoModal isOpen={isInfoOpen} onClose={() => setIsInfoOpen(false)} />
       {/* HEADER */}
       <header className="h-14 shrink-0 border-b border-border flex items-center justify-between px-4 lg:px-6 bg-card/80 backdrop-blur-sm z-40 relative">
         <div className="flex items-center gap-2">
-          <h1 className="font-bold text-xl tracking-tight flex items-center gap-1">
-            ANSI
-            <span className="text-primary bg-primary/10 px-1 rounded border border-primary/20">
-              101
-            </span>
-          </h1>
+          <Link href="/">
+            <h1 className="font-bold text-xl tracking-tight flex items-center gap-1">
+              ANSI
+              <span className="text-primary bg-primary/10 px-1 rounded border border-primary/20">
+                101
+              </span>
+            </h1>
+          </Link>
 
           <button
             onClick={() => setIsInfoOpen(true)}
@@ -128,9 +154,9 @@ function ANSIWorkspace() {
 
       {/* Main Workspace */}
       <div className="flex-1 flex overflow-hidden relative">
-        {/* LEFT COLUMN: Input & Preview */}
+        {/* LEFT COLUMN */}
         <div className="flex-1 flex flex-col min-w-0 bg-secondary/5">
-          {/* Top: Input Area */}
+          {/* Input Area */}
           <div className="flex-1 flex flex-col border-b border-border relative min-h-[50%] lg:min-h-75">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between">
               <span>Input String</span>
@@ -145,11 +171,14 @@ function ANSIWorkspace() {
                 setInput={setInput}
                 tokens={tokens}
                 hoveredId={hoveredId}
+                onHoverChange={setHoveredId}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
               />
             </div>
           </div>
 
-          {/* Bottom: Preview Area */}
+          {/* Preview Area */}
           <div className="h-1/2 lg:h-1/3 flex flex-col border-t border-border bg-background">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase flex justify-between items-center border-b border-border">
               <span>Output Preview</span>
@@ -159,7 +188,13 @@ function ANSIWorkspace() {
             </div>
 
             <div className="flex-1 p-4 overflow-auto scrollbar-thin scrollbar-thumb-terminal-border bg-black">
-              <TerminalOutput tokens={tokens} hoveredId={hoveredId} />
+              <TerminalOutput
+                tokens={tokens}
+                hoveredId={hoveredId}
+                onHoverChange={setHoveredId}
+                selectedId={selectedId}
+                onSelect={setSelectedId}
+              />
             </div>
           </div>
         </div>
@@ -174,35 +209,21 @@ function ANSIWorkspace() {
           id="mobile-sidebar"
           ref={sidebarRef}
           style={
-            {
-              "--sidebar-width": `${sidebarWidth}px`,
-            } as React.CSSProperties
+            { "--sidebar-width": `${sidebarWidth}px` } as React.CSSProperties
           }
-          className={`
-            /* BASE WIDTH */
-            w-full
-            
-            /* DESKTOP WIDTH */
-            lg:w-(--sidebar-width)
-            
-            bg-card border-l border-border 
-            flex flex-col
-            transition-transform duration-300 ease-in-out
-            shrink-0
-            
-            /* MOBILE DRAWER BEHAVIOR */
-            ${
-              isSidebarOpen
-                ? "fixed inset-0 z-50 top-14 translate-x-0" // Open: Cover screen
-                : "fixed inset-0 z-50 top-14 translate-x-full lg:translate-x-0 lg:static" // Closed: Off-screen OR Desktop Static
-            }
-        `}
+          className={clsx(
+            "w-full lg:w-(--sidebar-width) bg-card border-l border-border flex flex-col transition-transform duration-300 ease-in-out shrink-0",
+            isSidebarOpen
+              ? "fixed inset-0 z-50 top-14 translate-x-0"
+              : "fixed inset-0 z-50 top-14 translate-x-full lg:translate-x-0 lg:static"
+          )}
         >
           {/* DRAG HANDLE (Desktop Only) */}
           <div
-            className={`hidden lg:block absolute left-0 top-0 bottom-0 w-1 -ml-0.75 cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-50 ${
+            className={clsx(
+              "hidden lg:block absolute left-0 top-0 bottom-0 w-1 -ml-0.75 cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-50",
               isResizing ? "bg-primary" : "bg-transparent"
-            }`}
+            )}
             onMouseDown={startResizing}
           />
           {/* Cover Sidebar When Resizing */}
@@ -213,6 +234,8 @@ function ANSIWorkspace() {
             tokens={tokens}
             onHoverChange={setHoveredId}
             hoveredId={hoveredId}
+            selectedId={selectedId}
+            onSelect={setSelectedId}
           />
         </div>
       </div>
