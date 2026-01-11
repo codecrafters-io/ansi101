@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
-import { HelpCircle } from "lucide-react";
+import { Edit3, Eye, HelpCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
@@ -43,6 +43,14 @@ function ANSIWorkspace() {
   );
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
+
+  const [isEditing, setIsEditing] = useState(true);
+
+  useEffect(() => {
+    if (window.innerWidth < 1024) {
+      setIsEditing(false);
+    }
+  }, []);
 
   const [sidebarWidth, setSidebarWidth] = useState(600);
   const [isResizing, setIsResizing] = useState(false);
@@ -163,10 +171,30 @@ function ANSIWorkspace() {
           {/* Input Area */}
           <div className="order-1 shrink-0 h-50 lg:h-auto lg:flex-1 flex flex-col border-b border-border relative z-20 min-h-0">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between shrink-0">
-              <span>Input</span>
-              <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
-                RAW
-              </span>
+              <div className="flex items-center gap-2">
+                <span>Input</span>
+                <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
+                  RAW
+                </span>
+              </div>
+
+              {/* TOGGLE BUTTON: HIDDEN ON DESKTOP (lg:hidden) */}
+              <button
+                onClick={() => setIsEditing(!isEditing)}
+                className="lg:hidden flex items-center gap-1.5 text-[10px] bg-background border border-border px-2 py-1 rounded hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                {isEditing ? (
+                  <>
+                    <Eye className="w-3 h-3" />
+                    <span>Done</span>
+                  </>
+                ) : (
+                  <>
+                    <Edit3 className="w-3 h-3" />
+                    <span>Edit</span>
+                  </>
+                )}
+              </button>
             </div>
 
             <div className="flex-1 relative bg-background">
@@ -178,6 +206,7 @@ function ANSIWorkspace() {
                 onHoverChange={setHoveredId}
                 selectedId={selectedId}
                 onSelect={setSelectedId}
+                isEditing={isEditing}
               />
             </div>
           </div>
