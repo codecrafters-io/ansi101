@@ -180,7 +180,7 @@ function ANSIWorkspace() {
           <div className="order-1 shrink-0 h-50 lg:h-auto lg:flex-1 flex flex-col border-b border-border relative z-20 min-h-0">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
-                <span>Input</span>
+                <span>Input String</span>
                 {isDesktop && (
                   <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
                     RAW
@@ -233,9 +233,9 @@ function ANSIWorkspace() {
           </div>
 
           {/* Preview Area */}
-          <div className="order-3 shrink-0 h-37.5 lg:h-2/5 flex flex-col border-t border-border bg-background">
+          <div className="order-2 shrink-0 h-37.5 lg:h-2/5 flex flex-col border-t border-border bg-background">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase flex justify-between items-center border-b border-border shrink-0">
-              <span>Preview</span>
+              <span>Output Preview</span>
               <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
                 TERMINAL VIEW
               </span>
