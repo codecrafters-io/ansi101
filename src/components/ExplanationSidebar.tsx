@@ -21,12 +21,14 @@ export default function ExplanationSidebar({
   const selectedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (selectedId && selectedRef.current) {
-      selectedRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
+    if (!selectedId || !selectedRef.current) return;
+
+    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+
+    selectedRef.current.scrollIntoView({
+      behavior: "smooth",
+      block: isDesktop ? "start" : "nearest",
+    });
   }, [selectedId]);
 
   return (
