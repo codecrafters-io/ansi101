@@ -24,7 +24,7 @@ export default function ExplanationSidebar({
     if (selectedId && selectedRef.current) {
       selectedRef.current.scrollIntoView({
         behavior: "smooth",
-        block: "center",
+        block: "start",
       });
     }
   }, [selectedId]);

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useCallback, useRef, Suspense } from "react";
-import { Menu, X, HelpCircle } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import clsx from "clsx";
@@ -17,8 +17,8 @@ import InfoModal from "@/components/InfoModal";
 const DEFAULT_INPUT =
   "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m";
 
-const MIN_SIDEBAR_WIDTH = 250;
-const MAX_SIDEBAR_WIDTH = 800;
+const MIN_SIDEBAR_WIDTH = 400;
+const MAX_SIDEBAR_WIDTH = 1200;
 
 function ANSIWorkspace() {
   const searchParams = useSearchParams();
@@ -42,13 +42,31 @@ function ANSIWorkspace() {
     initialData.selectedId
   );
   const [hoveredId, setHoveredId] = useState<string | null>(null);
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
-  const [sidebarWidth, setSidebarWidth] = useState(384);
+  const [sidebarWidth, setSidebarWidth] = useState(600);
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const optimizeSidebarWidth = () => {
+      const width = window.innerWidth;
+
+      if (width >= 1024) {
+        const targetRatio = 0.45;
+        const idealWidth = width * targetRatio;
+
+        const finalWidth = Math.min(
+          Math.max(idealWidth, MIN_SIDEBAR_WIDTH),
+          MAX_SIDEBAR_WIDTH
+        );
+
+        setSidebarWidth(finalWidth);
+      }
+    };
+
+    optimizeSidebarWidth();
+  }, []);
 
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -107,6 +125,7 @@ function ANSIWorkspace() {
     >
       <LoadingScreen />
       <InfoModal isOpen={isInfoOpen} onClose={() => setIsInfoOpen(false)} />
+
       {/* HEADER */}
       <header className="h-14 shrink-0 border-b border-border flex items-center justify-between px-4 lg:px-6 bg-card/80 backdrop-blur-sm z-40 relative">
         <div className="flex items-center gap-2">
@@ -134,32 +153,17 @@ function ANSIWorkspace() {
           </span>
           <div className="hidden sm:block h-4 w-px bg-border"></div>
           <ThemeToggle />
-
-          {/* BURGER MENU */}
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="lg:hidden p-2 -mr-2 text-muted-foreground hover:bg-muted rounded-md active:scale-95 transition-all"
-            aria-label={isSidebarOpen ? "Close Sidebar" : "Open Sidebar"}
-            aria-expanded={isSidebarOpen}
-            aria-controls="mobile-sidebar"
-          >
-            {isSidebarOpen ? (
-              <X className="w-5 h-5" aria-hidden="true" />
-            ) : (
-              <Menu className="w-5 h-5" aria-hidden="true" />
-            )}
-          </button>
         </div>
       </header>
 
       {/* Main Workspace */}
-      <div className="flex-1 flex overflow-hidden relative">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
         {/* LEFT COLUMN */}
-        <div className="flex-1 flex flex-col min-w-0 bg-secondary/5">
+        <div className="contents lg:flex lg:flex-col lg:flex-1 lg:min-w-0 lg:bg-secondary/5">
           {/* Input Area */}
-          <div className="flex-1 flex flex-col border-b border-border relative min-h-[50%] lg:min-h-75">
-            <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between">
-              <span>Input String</span>
+          <div className="order-1 shrink-0 h-50 lg:h-auto lg:flex-1 flex flex-col border-b border-border relative z-20 min-h-0">
+            <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between shrink-0">
+              <span>Input</span>
               <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
                 RAW
               </span>
@@ -179,9 +183,9 @@ function ANSIWorkspace() {
           </div>
 
           {/* Preview Area */}
-          <div className="h-1/2 lg:h-1/3 flex flex-col border-t border-border bg-background">
-            <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase flex justify-between items-center border-b border-border">
-              <span>Output Preview</span>
+          <div className="order-3 shrink-0 h-37.5 lg:h-2/5 flex flex-col border-t border-border bg-background">
+            <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase flex justify-between items-center border-b border-border shrink-0">
+              <span>Preview</span>
               <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
                 TERMINAL VIEW
               </span>
@@ -199,9 +203,9 @@ function ANSIWorkspace() {
           </div>
         </div>
 
-        {/* Cover UI When Resizing */}
+        {/* Cover UI When Resizing (Desktop) */}
         {isResizing && (
-          <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-full h-full z-40" />
+          <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-full h-full z-40 cursor-col-resize" />
         )}
 
         {/* RIGHT COLUMN: Sidebar */}
@@ -212,24 +216,21 @@ function ANSIWorkspace() {
             { "--sidebar-width": `${sidebarWidth}px` } as React.CSSProperties
           }
           className={clsx(
-            "w-full lg:w-(--sidebar-width) bg-card border-l border-border flex flex-col transition-transform duration-300 ease-in-out shrink-0",
-            isSidebarOpen
-              ? "fixed inset-0 z-50 top-14 translate-x-0"
-              : "fixed inset-0 z-50 top-14 translate-x-full lg:translate-x-0 lg:static"
+            "order-2 lg:order-0",
+            "w-full lg:w-(--sidebar-width)",
+            "flex-1 lg:flex-none",
+            "bg-card border-b lg:border-b-0 lg:border-l border-border flex flex-col shrink-0 min-h-0"
           )}
         >
           {/* DRAG HANDLE (Desktop Only) */}
           <div
             className={clsx(
-              "hidden lg:block absolute left-0 top-0 bottom-0 w-1 -ml-0.75 cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-50",
+              "hidden lg:block absolute top-0 bottom-0 w-1 -ml-0.5 cursor-col-resize hover:bg-primary/50 active:bg-primary transition-colors z-50",
               isResizing ? "bg-primary" : "bg-transparent"
             )}
             onMouseDown={startResizing}
           />
-          {/* Cover Sidebar When Resizing */}
-          {isResizing && (
-            <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-full h-full z-40" />
-          )}
+
           <ExplanationSidebar
             tokens={tokens}
             onHoverChange={setHoveredId}
