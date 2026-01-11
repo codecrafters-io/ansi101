@@ -25,10 +25,12 @@ export default function ExplanationSidebar({
 
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
 
-    selectedRef.current.scrollIntoView({
-      behavior: "smooth",
-      block: isDesktop ? "start" : "nearest",
-    });
+    if (isDesktop) {
+      selectedRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
   }, [selectedId]);
 
   return (
