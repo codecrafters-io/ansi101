@@ -88,7 +88,7 @@ const TokenCard = forwardRef<HTMLDivElement, TokenCardProps>(
         )}
       >
         <details open className="group">
-          <summary className="flex items-center gap-3 px-4 py-3 cursor-pointer list-none select-none">
+          <summary className="flex items-center gap-3 pl-4 cursor-pointer list-none select-none">
             {/* ARROW */}
             <div
               className="text-foreground transition-transform group-open:rotate-90 p-1 -m-1 hover:text-primary"
@@ -119,7 +119,7 @@ const TokenCard = forwardRef<HTMLDivElement, TokenCardProps>(
 
             {/* THE CONTENT */}
             <div
-              className="flex-1 min-w-0"
+              className="flex-1 min-w-0 py-3"
               onClick={(e) => {
                 e.preventDefault();
                 onSelect(token.id);
