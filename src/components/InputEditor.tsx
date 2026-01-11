@@ -34,7 +34,6 @@ export default function InputEditor({
     }
   };
 
-  // HOVER LOGIC (Unchanged)
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const target = e.currentTarget as HTMLElement;
     if (!target) return;
@@ -56,7 +55,6 @@ export default function InputEditor({
     onHoverChange(null);
   };
 
-  // CLICK SELECT (Edit Mode - Cursor Based)
   const handleClickSelect = () => {
     if (!textareaRef.current) return;
     const cursorIndex = textareaRef.current.selectionStart;
@@ -71,7 +69,6 @@ export default function InputEditor({
     }
   };
 
-  // READ MODE CLICK (Hit Test Based)
   const handleReadModeClick = (e: React.MouseEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     const prevPointerEvents = target.style.pointerEvents;
@@ -115,8 +112,11 @@ export default function InputEditor({
           } else if (isHovered) {
             highlightClass =
               "bg-yellow-500/30 ring-2 ring-yellow-500/30 rounded-[2px] z-10";
-          } else if (token.type === "ansi") {
-            highlightClass = "bg-secondary/50 rounded-[2px]";
+          } else if (!isEditing) {
+            highlightClass =
+              "bg-transparent ring-1 ring-foreground/12 rounded-[2px]";
+          } else {
+            highlightClass = "bg-transparent";
           }
 
           return (
@@ -159,7 +159,6 @@ export default function InputEditor({
           autoCapitalize="off"
         />
       ) : (
-        // READ MODE DIV (Mobile Only)
         <div
           onScroll={handleScroll}
           onClick={handleReadModeClick}
@@ -167,7 +166,7 @@ export default function InputEditor({
           onMouseLeave={handleMouseLeave}
           className={clsx(
             "absolute inset-0 block w-full h-full z-10 overflow-auto scrollbar-thin scrollbar-thumb-border",
-            "text-foreground cursor-default bg-transparent", // VISIBLE TEXT
+            "text-foreground cursor-default bg-transparent",
             paddingClasses,
             typographyClasses
           )}

@@ -18,10 +18,11 @@ export default function ExplanationSidebar({
   selectedId,
   onSelect,
 }: ExplanationSidebarProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const selectedRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!selectedId || !selectedRef.current) return;
+    if (!selectedId || !selectedRef.current || !containerRef.current) return;
 
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
 
@@ -30,6 +31,20 @@ export default function ExplanationSidebar({
         behavior: "smooth",
         block: "start",
       });
+    } else {
+      const container = containerRef.current;
+      const item = selectedRef.current;
+      const containerRect = container.getBoundingClientRect();
+      const itemRect = item.getBoundingClientRect();
+      const isAbove = itemRect.top < containerRect.top;
+      const isBelow = itemRect.bottom > containerRect.bottom;
+
+      if (isAbove || isBelow) {
+        container.scrollTo({
+          top: item.offsetTop,
+          behavior: "smooth",
+        });
+      }
     }
   }, [selectedId]);
 
@@ -40,8 +55,10 @@ export default function ExplanationSidebar({
           Code Explanation
         </h2>
       </div>
-
-      <div className="overflow-y-auto flex-1 p-0 scrollbar-thin scrollbar-thumb-border">
+      <div
+        ref={containerRef}
+        className="overflow-y-auto flex-1 p-0 scrollbar-thin scrollbar-thumb-border relative"
+      >
         {tokens.length === 0 && (
           <p className="p-6 text-foreground italic text-center">
             No input detected.

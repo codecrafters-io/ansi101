@@ -45,36 +45,11 @@ function ANSIWorkspace() {
   const [isInfoOpen, setIsInfoOpen] = useState(false);
 
   const [isEditing, setIsEditing] = useState(true);
-
-  useEffect(() => {
-    if (window.innerWidth < 1024) {
-      setIsEditing(false);
-    }
-  }, []);
+  const [isDesktop, setIsDesktop] = useState(true);
 
   const [sidebarWidth, setSidebarWidth] = useState(600);
   const [isResizing, setIsResizing] = useState(false);
   const sidebarRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const optimizeSidebarWidth = () => {
-      const width = window.innerWidth;
-
-      if (width >= 1024) {
-        const targetRatio = 0.45;
-        const idealWidth = width * targetRatio;
-
-        const finalWidth = Math.min(
-          Math.max(idealWidth, MIN_SIDEBAR_WIDTH),
-          MAX_SIDEBAR_WIDTH
-        );
-
-        setSidebarWidth(finalWidth);
-      }
-    };
-
-    optimizeSidebarWidth();
-  }, []);
 
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -104,6 +79,39 @@ function ANSIWorkspace() {
     setSelectedId(data.selectedId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams]);
+
+  useEffect(() => {
+    const optimizeSidebarWidth = () => {
+      const width = window.innerWidth;
+
+      if (width >= 1024) {
+        const targetRatio = 0.45;
+        const idealWidth = width * targetRatio;
+
+        const finalWidth = Math.min(
+          Math.max(idealWidth, MIN_SIDEBAR_WIDTH),
+          MAX_SIDEBAR_WIDTH
+        );
+
+        setSidebarWidth(finalWidth);
+      }
+    };
+
+    optimizeSidebarWidth();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const isDesktop = window.innerWidth >= 1024;
+      setIsEditing(isDesktop);
+      setIsDesktop(isDesktop);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   useEffect(() => {
     if (isResizing) {
@@ -173,12 +181,25 @@ function ANSIWorkspace() {
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <span>Input</span>
-                <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
-                  RAW
-                </span>
+                {isDesktop && (
+                  <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
+                    RAW
+                  </span>
+                )}
+                {!isDesktop && (
+                  <span
+                    className={clsx(
+                      "text-[10px] border px-1.5 py-0.5 rounded font-medium transition-colors",
+                      isEditing
+                        ? "bg-blue-500/10 text-blue-500 border-blue-500/20"
+                        : "bg-emerald-500/10 text-emerald-500 border-emerald-500/20"
+                    )}
+                  >
+                    {isEditing ? "EDITING" : "VIEWING"}
+                  </span>
+                )}
               </div>
 
-              {/* TOGGLE BUTTON: HIDDEN ON DESKTOP (lg:hidden) */}
               <button
                 onClick={() => setIsEditing(!isEditing)}
                 className="lg:hidden flex items-center gap-1.5 text-[10px] bg-background border border-border px-2 py-1 rounded hover:bg-accent hover:text-accent-foreground transition-colors"
