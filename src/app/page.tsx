@@ -14,8 +14,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import LoadingScreen from "@/components/LoadingScreen";
 import InfoModal from "@/components/InfoModal";
 
-const DEFAULT_INPUT =
-  "Basic: \\x1b[31;1mRed Bold\\x1b[0m\nRGB: \\x1b[38;2;255;100;200mPink Custom\\x1b[0m\n256: \\x1b[38;5;82mBright Green\\x1b[0m";
+const DEFAULT_INPUT = "Hello \\x1b[32;1mWorld\\x1b[0m";
 
 const MIN_SIDEBAR_WIDTH = 400;
 const MAX_SIDEBAR_WIDTH = 1200;
@@ -177,7 +176,7 @@ function ANSIWorkspace() {
         {/* LEFT COLUMN */}
         <div className="contents lg:flex lg:flex-col lg:flex-1 lg:min-w-0 lg:bg-secondary/5">
           {/* Input Area */}
-          <div className="order-1 shrink-0 h-50 lg:h-auto lg:flex-1 flex flex-col border-b border-border relative z-20 min-h-0">
+          <div className="order-1 shrink-0 h-37.5 lg:h-auto lg:flex-1 flex flex-col border-b border-border relative z-20 min-h-0">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
                 <span>Input String</span>
