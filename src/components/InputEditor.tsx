@@ -86,7 +86,7 @@ export default function InputEditor({
   };
 
   const typographyClasses =
-    "font-mono text-sm ios:text-base leading-relaxed whitespace-pre-wrap break-all";
+    "font-mono text-sm leading-relaxed whitespace-pre-wrap break-all";
   const paddingClasses = "p-4";
 
   return (

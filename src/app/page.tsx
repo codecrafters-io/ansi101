@@ -201,7 +201,7 @@ function ANSIWorkspace() {
 
               <button
                 onClick={() => setIsEditing(!isEditing)}
-                className="lg:hidden flex items-center gap-1.5 text-[10px] ios:text-xs bg-background border border-border px-2 py-1 rounded hover:bg-accent hover:text-accent-foreground transition-colors"
+                className="lg:hidden flex items-center gap-1.5 text-[10px] bg-background border border-border px-2 py-1 rounded hover:bg-accent hover:text-accent-foreground transition-colors"
               >
                 {isEditing ? (
                   <>
@@ -233,9 +233,9 @@ function ANSIWorkspace() {
 
           {/* Preview Area */}
           <div className="order-2 shrink-0 h-37.5 lg:h-2/5 flex flex-col border-t border-border bg-background">
-            <div className="bg-muted/50 px-4 py-2 text-xs ios:text-sm font-bold text-muted-foreground uppercase flex justify-between items-center border-b border-border shrink-0">
+            <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase flex justify-between items-center border-b border-border shrink-0">
               <span>Output Preview</span>
-              <span className="text-[10px] ios:text-xs bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
+              <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
                 TERMINAL VIEW
               </span>
             </div>
