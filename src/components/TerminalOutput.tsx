@@ -60,7 +60,7 @@ export default function TerminalOutput({
   });
 
   return (
-    <div className="font-mono text-sm leading-relaxed whitespace-pre-wrap break-all relative z-10">
+    <div className="font-mono text-sm ios:text-base leading-relaxed whitespace-pre-wrap break-all relative z-10">
       {renderableParts.map((part) => {
         let highlightClass = "";
 

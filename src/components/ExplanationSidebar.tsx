@@ -49,9 +49,9 @@ export default function ExplanationSidebar({
   }, [selectedId]);
 
   return (
-    <div className="h-full flex flex-col bg-card border-l border-border text-card-foreground font-sans text-sm">
+    <div className="h-full flex flex-col bg-card border-l border-border text-card-foreground font-sans text-sm ios:text-base">
       <div className="p-4 border-b border-border bg-muted/20 shadow-sm z-10">
-        <h2 className="font-bold text-muted-foreground uppercase tracking-wider text-xs">
+        <h2 className="font-bold text-muted-foreground uppercase tracking-wider text-xs ios:text-sm">
           Code Explanation
         </h2>
       </div>
@@ -147,11 +147,11 @@ const TokenCard = forwardRef<HTMLDivElement, TokenCardProps>(
               }}
             >
               <div className="flex items-center mb-0.5">
-                <code className="font-mono text-primary font-bold text-xs px-1.5 py-0.5 rounded bg-muted/50 border border-border truncate">
+                <code className="font-mono text-primary font-bold text-xs ios:text-sm px-1.5 py-0.5 rounded bg-muted/50 border border-border truncate">
                   {token.raw}
                 </code>
               </div>
-              <div className="text-foreground text-xs font-medium truncate">
+              <div className="text-foreground text-xs ios:text-sm font-medium truncate">
                 {token.summary}
               </div>
             </div>
@@ -167,7 +167,7 @@ const TokenCard = forwardRef<HTMLDivElement, TokenCardProps>(
             {token.parts?.map((part, idx) => (
               <div
                 key={idx}
-                className="relative flex gap-3 text-xs leading-relaxed group/part"
+                className="relative flex gap-3 text-xs ios:text-sm leading-relaxed group/part"
               >
                 <div className="absolute left-0.75 top-3 -bottom-3 w-px bg-border last:hidden"></div>
                 <div className="shrink-0 flex flex-col items-center z-10">
@@ -197,7 +197,7 @@ const TokenCard = forwardRef<HTMLDivElement, TokenCardProps>(
                     </code>
                     <span
                       className={clsx(
-                        "uppercase text-[10px] font-bold tracking-wider",
+                        "uppercase text-[10px] ios:text-xs font-bold tracking-wider",
                         part.status === "error"
                           ? "text-red-500"
                           : "text-foreground"

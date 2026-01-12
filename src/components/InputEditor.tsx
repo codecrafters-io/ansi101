@@ -86,7 +86,7 @@ export default function InputEditor({
   };
 
   const typographyClasses =
-    "font-mono text-sm md:text-sm leading-relaxed whitespace-pre-wrap break-all";
+    "font-mono text-sm ios:text-base leading-relaxed whitespace-pre-wrap break-all";
   const paddingClasses = "p-4";
 
   return (
@@ -148,9 +148,6 @@ export default function InputEditor({
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onClick={handleClickSelect}
-          onTouchEnd={(e) => {
-            e.stopPropagation();
-          }}
           className={clsx(
             "absolute inset-0 block w-full h-full bg-transparent text-foreground focus:outline-none resize-none z-10 overflow-auto scrollbar-thin scrollbar-thumb-border",
             paddingClasses,
