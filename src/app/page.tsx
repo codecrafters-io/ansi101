@@ -178,7 +178,12 @@ function ANSIWorkspace() {
           {/* Input Area */}
           <div className="order-1 shrink-0 h-37.5 lg:h-auto lg:flex-1 flex flex-col border-b border-border relative z-20 min-h-0">
             <div className="bg-muted/50 px-4 py-2 text-xs font-bold text-muted-foreground uppercase z-20 border-b border-border flex items-center justify-between shrink-0">
-              <div className="flex items-center gap-2">
+              <div
+                className={clsx(
+                  "flex items-center",
+                  isDesktop ? "w-full justify-between" : "gap-2"
+                )}
+              >
                 <span>Input String</span>
                 {isDesktop && (
                   <span className="text-[10px] bg-background border border-border px-1.5 py-0.5 rounded text-muted-foreground font-medium">
