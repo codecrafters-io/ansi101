@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import PlausibleProvider from "next-plausible/dist/lib/PlausibleProvider";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -64,6 +65,11 @@ export default function RootLayout({
       >
         <PlausibleProvider domain="ansi101.com">{children}</PlausibleProvider>
         <Analytics />
+        <Script
+          src="https://lobbyside-staging.ccio.dev/widget.js"
+          data-widget-id="fa63be2b-25e3-4f0d-b371-bc82eab40df4"
+          strategy="lazyOnload"
+        />
       </body>
     </html>
   );
